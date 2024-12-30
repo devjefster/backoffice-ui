@@ -1,6 +1,6 @@
 
 export interface Enum{
-    nome:string,
-    descricao:string
+    chave:string,
+    valor:string
 }
 

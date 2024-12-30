@@ -44,7 +44,7 @@ const DataTable = <T,>({
                         <Table.HeadCell
                             key={index}
                             onClick={() => header.sortable && handleSort(header.key)}
-                            className={`cursor-pointer ${header.sortable ? "hover:underline" : ""}`}
+                            className={`cursor-pointer px-4 py-2 text-sm ${header.sortable ? "hover:underline" : ""}`}
                         >
                             {header.label}
                             {header.sortable && (

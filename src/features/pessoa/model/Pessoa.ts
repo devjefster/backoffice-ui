@@ -3,14 +3,14 @@ import {Contato} from "@components/forms/contato/model/Contato";
 
 export interface FiltrosPessoa {
     nome: string | null,
-    tipo: TipoCadastro | null,
-    tipoPessoa: TipoPessoa | null,
+    tipo: string | null,
+    tipoPessoa: string | null,
     cpfCnpj: string | null
 
 }
 
 export interface Pessoa {
-    id: number;
+    id: number|null;
     cpfCnpj: string | null;
     nomeFantasia: string | null;
     razaoSocial: string | null;
@@ -21,9 +21,8 @@ export interface Pessoa {
     emailSecundario: string | null;
     telefone: string | null;
     telefoneSecundario: string | null;
-    tipoPessoa: TipoPessoa | null,
-    tipo: TipoCadastro,
-    contatos: Contato[],
+    tipoPessoa: string | null,
+    tipo: string,
 }
 
 export enum TipoPessoa {

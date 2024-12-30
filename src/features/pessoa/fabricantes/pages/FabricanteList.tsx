@@ -14,7 +14,7 @@ const FabricantesList = () => {
     const [filtros, setFiltros] = useState<FiltrosPessoa>({
         nome: "",
         tipoPessoa: null, // Manter null para valores não selecionados
-        tipo: TipoCadastro.FABRICANTE,
+        tipo: TipoCadastro[TipoCadastro.FABRICANTE],
         cpfCnpj: ""
     });
 
@@ -64,14 +64,10 @@ const FabricantesList = () => {
                     required
                 />
                 <Seletor
-                    opcoes={[
-                        {nome: "", descricao: "Todos"},
-                        {nome: TipoPessoa.PESSOA_FISICA, descricao: "Pessoa Física"},
-                        {nome: TipoPessoa.PESSOA_JURIDICA, descricao: "Pessoa Jurídica"},
-                    ]}
+                    enumType={TipoPessoa}
                     value={filtros.tipoPessoa || ""}
                     placeholder="Tipo de Pessoa"
-                    onChange={(e) => setFiltros({...filtros, tipoPessoa: e.target.value as TipoPessoa | null})}
+                    onChange={(e) => setFiltros({...filtros, tipoPessoa: e as TipoPessoa | null})}
                 />
             </div>
             <div className="mb-6 flex gap-4 items-center">
@@ -110,16 +106,16 @@ const FabricantesList = () => {
                 data={fabricantes}
                 headers={[
                     {key: "cpfCnpj", label: "CPF/CNPJ", sortable: false},
-                    {key: "Nome", label: "Nome Fantasia", sortable: true},
-                    {key: "razaoSocial", label: "Razão Social", sortable: true},
+                    {key: "nome", label: "Nome Fantasia", sortable: true},
                     {key: "acoes", label: "Ações"},
                 ]}
                 emptyMessage="Nenhum fabricante encontrado."
                 renderRow={(fabricante) => (
-                    <tr key={fabricante.id} className="hover:bg-gray-50">
-                        <TableCell>{fabricante.cpfCnpj}</TableCell>
-                        <TableCell>{fabricante.nomeFantasia || fabricante.razaoSocial ? fabricante.nomeFantasia : fabricante.nome}</TableCell>
-                        <TableCell>
+                    <>
+                        <TableCell className="w-1/3">{fabricante.cpfCnpj}</TableCell>
+                        <TableCell
+                            className="w-1/3">{fabricante.nomeFantasia || fabricante.razaoSocial ? fabricante.nomeFantasia : fabricante.nome}</TableCell>
+                        <TableCell className="w-1/3">
                             <div className="flex gap-2">
                                 <Button
                                     gradientDuoTone="cyanToBlue"
@@ -135,15 +131,11 @@ const FabricantesList = () => {
                                 </Button>
                             </div>
                         </TableCell>
-                    </tr>
+                    </>
                 )}
             />
-
-            {/* Pagination */}
             <CustomPagination pagination={pagination} setPagination={setPagination}/>
-
         </div>
-
     );
 };
 

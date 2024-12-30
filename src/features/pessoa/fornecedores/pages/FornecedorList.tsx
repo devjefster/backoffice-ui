@@ -14,7 +14,7 @@ const FornecedorList = () => {
     const [filtros, setFiltros] = useState<FiltrosPessoa>({
         nome: "",
         tipoPessoa: null, // Manter null para valores não selecionados
-        tipo: TipoCadastro.FORNECEDOR,
+        tipo: TipoCadastro[TipoCadastro.FORNECEDOR],
         cpfCnpj: ""
     });
 
@@ -64,14 +64,10 @@ const FornecedorList = () => {
                     required
                 />
                 <Seletor
-                    opcoes={[
-                        {nome: "", descricao: "Todos"},
-                        {nome: TipoPessoa.PESSOA_FISICA, descricao: "Pessoa Física"},
-                        {nome: TipoPessoa.PESSOA_JURIDICA, descricao: "Pessoa Jurídica"},
-                    ]}
+                    enumType={TipoPessoa}
                     value={filtros.tipoPessoa || ""}
                     placeholder="Tipo de Pessoa"
-                    onChange={(e) => setFiltros({...filtros, tipoPessoa: e.target.value as TipoPessoa | null})}
+                    onChange={(e) => setFiltros({...filtros, tipoPessoa: e as TipoPessoa | null})}
                 />
             </div>
             <div className="mb-6 flex gap-4 items-center">
@@ -114,7 +110,7 @@ const FornecedorList = () => {
                 ]}
                 emptyMessage="Nenhum fornecedor encontrado."
                 renderRow={(fornecedor) => (
-                    <tr key={fornecedor.id} className="hover:bg-gray-50">
+                    <>
                         <TableCell>{fornecedor.cpfCnpj}</TableCell>
                         <TableCell>{fornecedor.nomeFantasia || fornecedor.razaoSocial ? fornecedor.nomeFantasia : fornecedor.nome}</TableCell>
                         <TableCell>
@@ -133,7 +129,7 @@ const FornecedorList = () => {
                                 </Button>
                             </div>
                         </TableCell>
-                    </tr>
+                    </>
                 )}
             />
 

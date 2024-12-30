@@ -105,19 +105,19 @@ const InsumoForm: React.FC<{
                         <div className="flex flex-col">
                             <Label htmlFor="tipoInsumo">Tipo de Insumo</Label>
                             <Seletor
-                                opcoes={tipoOptions}
+                                enums={tipoOptions}
                                 value={formData.tipoInsumo}
                                 placeholder="Selecione o Tipo de Insumo"
-                                onChange={(e) => handleChange("tipoInsumo", e.target.value)}
+                                onChange={(e) => handleChange("tipoInsumo", e)}
                             />
                         </div>
                         <div className="flex flex-col">
                             <Label htmlFor="tipoInsumo">Unidade Medida</Label>
                             <Seletor
-                                opcoes={unidadeMedidaOptions}
+                                enums={unidadeMedidaOptions}
                                 value={formData.unidadeMedida}
                                 placeholder="Selecione a Unidade de Medida"
-                                onChange={(e) => handleChange("tipoUnidade", e.target.value)}
+                                onChange={(e) => handleChange("tipoUnidade", e)}
                             />
                         </div>
 

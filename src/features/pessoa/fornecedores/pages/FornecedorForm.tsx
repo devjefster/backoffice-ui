@@ -12,14 +12,13 @@ import {Pessoa, TipoCadastro, TipoPessoa} from "@features/pessoa/model/Pessoa";
 import PessoaService from "@features/pessoa/service/PessoaService";
 import Seletor from "@components/comum/Seletor";
 import CPFOrCNPJInput from "@components/inputs/CPFOrCNPJInput";
-import {Enum} from "../../../../model/Comum";
 
 const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: Pessoa) => void }> = ({
                                                                                                           fornecedor,
                                                                                                           onSave,
                                                                                                       }) => {
     const [formData, setFormData] = useState<Pessoa>({
-        id: 0,
+        id: null,
         cpfCnpj: "",
         nomeFantasia: "",
         nome: "",
@@ -29,20 +28,12 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
         emailSecundario: "",
         telefone: "",
         telefoneSecundario: "",
-        tipo: TipoCadastro.FORNECEDOR,
-        tipoPessoa: TipoPessoa.PESSOA_JURIDICA, // Valor padrão para evitar null
-        contatos: [],
+        tipo: TipoCadastro[TipoCadastro.FORNECEDOR],
+        tipoPessoa: "PESSOA_JURIDICA", // Valor padrão para evitar null
         inscricaoEstadual: ""
     });
 
     const [errors, setErrors] = useState<{ cpfCnpj?: string; razaoSocial?: string, nome?: string, email?: string }>({});
-    const tiposPessoa: Enum[] = [{
-        nome: TipoPessoa.PESSOA_JURIDICA.toString(),
-        descricao: TipoPessoa.PESSOA_JURIDICA
-    }, {
-        nome: TipoPessoa.PESSOA_FISICA.toString(),
-        descricao: TipoPessoa.PESSOA_FISICA
-    }];
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [fornecedorNameToDelete, setPessoaNameToDelete] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -221,10 +212,10 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
                         Pessoa Física ou Jurídica
                     </Label>
                     <Seletor
-                        opcoes={tiposPessoa}
+                        enumType={TipoPessoa}
                         value={formData.tipoPessoa || ""}
                         placeholder="Selecione o Tipo de Pessoa"
-                        onChange={(e) => setFormData({...formData, tipoPessoa: e.target.value as TipoPessoa})}/>
+                        onChange={(e) => setFormData({...formData, tipoPessoa: e as TipoPessoa})}/>
                 </div>
 
                 {formData.tipoPessoa === TipoPessoa.PESSOA_FISICA && (
@@ -335,7 +326,7 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
                 <Button type="submit" gradientDuoTone="greenToBlue" disabled={isSubmitting}>
                     {isSubmitting ? "Salvando..." : "Salvar"}
                 </Button>
-                {formData.id > 0 && (
+                {formData.id && (
                     <Button
                         type="button"
                         color="failure"

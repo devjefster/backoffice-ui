@@ -12,37 +12,32 @@ import {Pessoa, TipoCadastro, TipoPessoa} from "@features/pessoa/model/Pessoa";
 import PessoaService from "@features/pessoa/service/PessoaService";
 import Seletor from "@components/comum/Seletor";
 import CPFOrCNPJInput from "@components/inputs/CPFOrCNPJInput";
-import {Enum} from "../../../../model/Comum";
 
 const FabricanteForm: React.FC<{ fabricante?: Pessoa | null; onSave: (formData: Pessoa) => void }> = ({
                                                                                                           fabricante,
                                                                                                           onSave,
                                                                                                       }) => {
-    const [formData, setFormData] = useState<Pessoa>({
-        id: 0,
-        cpfCnpj: "",
-        nomeFantasia: "",
-        nome: "",
-        razaoSocial: "",
-        enderecos: [],
-        email: "",
-        emailSecundario: "",
-        telefone: "",
-        telefoneSecundario: "",
-        tipo: TipoCadastro.FABRICANTE,
-        tipoPessoa: TipoPessoa.PESSOA_JURIDICA, // Valor padrão para evitar null
-        contatos: [],
-        inscricaoEstadual: ""
-    });
+    const estadoInicial = () => {
+        return {
+            id: null,
+            cpfCnpj: "",
+            nomeFantasia: "",
+            nome: "",
+            razaoSocial: "",
+            enderecos: [],
+            email: "",
+            emailSecundario: "",
+            telefone: "",
+
+            telefoneSecundario: "",
+            tipo: TipoCadastro[TipoCadastro.FABRICANTE],
+            tipoPessoa: "PESSOA_JURIDICA", // Valor padrão para evitar null
+            inscricaoEstadual: ""
+        };
+    }
+    const [formData, setFormData] = useState<Pessoa>(estadoInicial());
 
     const [errors, setErrors] = useState<{ cpfCnpj?: string; razaoSocial?: string, nome?: string, email?: string }>({});
-    const tiposPessoa: Enum[] = [{
-        nome: TipoPessoa.PESSOA_JURIDICA.toString(),
-        descricao: TipoPessoa.PESSOA_JURIDICA
-    }, {
-        nome: TipoPessoa.PESSOA_FISICA.toString(),
-        descricao: TipoPessoa.PESSOA_FISICA
-    }];
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [fabricanteNameToDelete, setPessoaNameToDelete] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -157,7 +152,7 @@ const FabricanteForm: React.FC<{ fabricante?: Pessoa | null; onSave: (formData: 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        console.log(formData)
         if (!validateForm() || !(await validateUniqueFields())) {
             return;
         }
@@ -207,10 +202,10 @@ const FabricanteForm: React.FC<{ fabricante?: Pessoa | null; onSave: (formData: 
     return (
         <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="flex justify-between items-center">
-                <TituloPagina titulo={"Pessoa"}
+                <TituloPagina titulo={"Fabricante"}
                               subTitulo={!fabricante?.id || fabricante?.id === 0 ? ("Novo") : ("Atualizar")}/>
 
-                <Button color="gray" onClick={() => navigate("/fabricantees")} className="flex items-center gap-2">
+                <Button color="gray" onClick={() => navigate("/fabricantes")} className="flex items-center gap-2">
                     <HiArrowLeft className="w-5 h-5"/>
                     Voltar
                 </Button>
@@ -221,31 +216,47 @@ const FabricanteForm: React.FC<{ fabricante?: Pessoa | null; onSave: (formData: 
                         Pessoa Física ou Jurídica
                     </Label>
                     <Seletor
-                        opcoes={tiposPessoa}
-                        value={formData.tipoPessoa || ""}
+                        enumType={TipoPessoa}
+                        value={formData.tipoPessoa || TipoPessoa.PESSOA_JURIDICA}
                         placeholder="Selecione o Tipo de Pessoa"
-                        onChange={(e) => setFormData({...formData, tipoPessoa: e.target.value as TipoPessoa})}/>
+                        onChange={(e) => {
+                            setFormData((prevState) => {
+                                const updatedState = {...prevState, tipoPessoa: e as TipoPessoa};
+                                console.log("Comparing:", formData.tipoPessoa, "===", TipoPessoa.PESSOA_FISICA);
+                                console.log("Type of formData.tipoPessoa:", typeof formData.tipoPessoa);
+                                console.log("Type of TipoPessoa.PESSOA_FISICA:", typeof TipoPessoa.PESSOA_FISICA);
+
+                                return updatedState;
+                            });
+                        }
+                        }/>
 
                 </div>
-                {formData.tipoPessoa === TipoPessoa.PESSOA_FISICA && (
-                    <div>
-                        <Label htmlFor="nome" className="flex items-center">
-                            Nome
-                            <Tooltip content="Nome utilizado comercialmente pela empresa">
-                                <HiOutlineInformationCircle className="ml-2 text-gray-500 cursor-pointer"/>
-                            </Tooltip>
-                        </Label>
-                        <TextInput
-                            id="nome"
-                            type="text"
-                            placeholder="Digite o Nome"
-                            value={formData.nome || ""}
-                            onChange={(e) => handleChange("nome", e.target.value)}
-                            required/>
-                    </div>
+
+                {formData.tipoPessoa === "PESSOA_FISICA" && (
+                    <>
+
+                        <div>
+
+                            <Label htmlFor="nome" className="flex items-center">
+                                Nome
+                                <Tooltip content="Nome utilizado comercialmente pela empresa">
+                                    <HiOutlineInformationCircle className="ml-2 text-gray-500 cursor-pointer"/>
+                                </Tooltip>
+                            </Label>
+                            <TextInput
+                                id="nome"
+                                type="text"
+                                placeholder="Digite o Nome"
+                                value={formData.nome || ""}
+                                onChange={(e) => handleChange("nome", e.target.value)}
+                                required/>
+                        </div>
+                    </>
                 )}
 
-                {formData.tipoPessoa === TipoPessoa.PESSOA_JURIDICA && (
+                {formData.tipoPessoa === "PESSOA_JURIDICA" && (
+
                     <>
                         <div>
                             <Label htmlFor="nomeFantasia" className="flex items-center">
@@ -326,13 +337,13 @@ const FabricanteForm: React.FC<{ fabricante?: Pessoa | null; onSave: (formData: 
                 </Button>
             </div>
             <div className="flex justify-end gap-4 mt-6">
-                <Button type="button" color="gray" onClick={() => console.log("Cancel action")}>
+                <Button type="button" color="gray" onClick={() => setFormData(estadoInicial)}>
                     Cancelar
                 </Button>
                 <Button type="submit" gradientDuoTone="greenToBlue" disabled={isSubmitting}>
                     {isSubmitting ? "Salvando..." : "Salvar"}
                 </Button>
-                {formData.id > 0 && (
+                {formData.id && (
                     <Button
                         type="button"
                         color="failure"

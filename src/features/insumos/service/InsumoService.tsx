@@ -35,7 +35,7 @@ const InsumoService = {
 
     obterTiposDeInsumo: async () => {
         try {
-            const response = await axiosInstance.get<{ nome: string; descricao: string }[]>("/insumos/tipo-insumo");
+            const response = await axiosInstance.get<{ chave: string; valor: string }[]>("/insumos/tipo-insumo");
             return response.data;
         } catch (error) {
             handleError(error);
@@ -44,7 +44,7 @@ const InsumoService = {
     },
     obterUnidadeMedida: async () => {
         try {
-            const response = await axiosInstance.get<{ nome: string; descricao: string }[]>("/insumos/unidade-medida");
+            const response = await axiosInstance.get<{ chave: string; valor: string }[]>("/insumos/unidade-medida");
             return response.data;
         } catch (error) {
             handleError(error);
@@ -54,7 +54,7 @@ const InsumoService = {
 
     obterSubtiposPorTipoInsumo: async (tipoInsumo: string) => {
         try {
-            const response = await axiosInstance.get<{ name: string; descricao: string }[]>(
+            const response = await axiosInstance.get<{ chave: string; valor: string }[]>(
                 `/insumos/subtipos-insumo/${tipoInsumo}`
             );
             return response.data;

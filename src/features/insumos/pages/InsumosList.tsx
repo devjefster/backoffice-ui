@@ -16,8 +16,8 @@ const InsumoList = () => {
     const [filters, setFilters] = useState({textoBusca: "", tipoInsumo: "", unidadeMedida: ""});
     const [pagination, setPagination] = useState({page: 0, size: 10, totalPages: 0});
     const [isLoading, setIsLoading] = useState(false);
-    const [tiposInsumo, setTiposInsumo] = useState<{ nome: string; descricao: string }[]>([]);
-    const [unidadesMedida, setUnidadesMedida] = useState<{ nome: string; descricao: string }[]>([]);
+    const [tiposInsumo, setTiposInsumo] = useState<{ chave: string; valor: string }[]>([]);
+    const [unidadesMedida, setUnidadesMedida] = useState<{ chave: string; valor: string }[]>([]);
     const navigate = useNavigate();
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [insumoToDelete, setInsumoToDelete] = useState<string | null>(null)
@@ -90,17 +90,17 @@ const InsumoList = () => {
                 />
 
                 <Seletor
-                    opcoes={tiposInsumo}
+                    enums={tiposInsumo}
                     value={filters.tipoInsumo}
                     placeholder="Selecione o Tipo de Insumo"
-                    onChange={(e) => setFilters({...filters, tipoInsumo: e.target.value})}
+                    onChange={(e) => setFilters({...filters, tipoInsumo: e})}
                 />
 
                 <Seletor
-                    opcoes={unidadesMedida}
+                    enums={unidadesMedida}
                     value={filters.unidadeMedida}
                     placeholder="Selecione a Unidade de Medida"
-                    onChange={(e) => setFilters({...filters, unidadeMedida: e.target.value})}
+                    onChange={(e) => setFilters({...filters, unidadeMedida: e})}
                 />
             </div>
             <div className="flex justify-end mb-6 space-x-4">

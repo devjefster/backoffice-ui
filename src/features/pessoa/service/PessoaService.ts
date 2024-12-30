@@ -32,15 +32,12 @@ const PessoaService = {
 
     deletar: (id: number) => axiosInstance.delete<void>(`/pessoa/${id}`),
     validarUnicidade: async (cpfCnpj: string | null, email: string | null) => {
-        const params = new URLSearchParams();
-        if (cpfCnpj) params.append('cpfCnpj', cpfCnpj);
-        if (email) params.append('email', email);
 
-        return axiosInstance.get<{
+        return axiosInstance.post<{
             unico: boolean,
             cpfCnpj: string,
             email: string
-        }>(`/pessoa/validar-unicidade`, {params})
+        }>(`/pessoa/validar-unicidade`, {cpfCnpj:cpfCnpj,email:email})
 
     }
 };

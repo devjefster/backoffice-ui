@@ -221,12 +221,7 @@ const FabricanteForm: React.FC<{ fabricante?: Pessoa | null; onSave: (formData: 
                         placeholder="Selecione o Tipo de Pessoa"
                         onChange={(e) => {
                             setFormData((prevState) => {
-                                const updatedState = {...prevState, tipoPessoa: e as TipoPessoa};
-                                console.log("Comparing:", formData.tipoPessoa, "===", TipoPessoa.PESSOA_FISICA);
-                                console.log("Type of formData.tipoPessoa:", typeof formData.tipoPessoa);
-                                console.log("Type of TipoPessoa.PESSOA_FISICA:", typeof TipoPessoa.PESSOA_FISICA);
-
-                                return updatedState;
+                                return {...prevState, tipoPessoa: e as TipoPessoa};
                             });
                         }
                         }/>

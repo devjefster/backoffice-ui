@@ -105,7 +105,6 @@ const FornecedorList = () => {
                 headers={[
                     {key: "cpfCnpj", label: "CPF/CNPJ", sortable: false},
                     {key: "Nome", label: "Nome Fantasia", sortable: true},
-                    {key: "razaoSocial", label: "Razão Social", sortable: true},
                     {key: "acoes", label: "Ações"},
                 ]}
                 emptyMessage="Nenhum fornecedor encontrado."

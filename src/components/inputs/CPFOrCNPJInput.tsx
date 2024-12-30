@@ -113,7 +113,7 @@ const CPFOrCNPJInput: React.FC<CPFOrCNPJInputProps> = ({
     };
 
     return (
-        <div className="space-y-2">
+        <div>
             {label && (
                 <label
                     htmlFor="cpf-cnpj"

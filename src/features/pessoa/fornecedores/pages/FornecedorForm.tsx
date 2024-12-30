@@ -71,7 +71,7 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
             enderecos: [
                 ...prev.enderecos,
                 {
-                    id: 0,
+                    id: null,
                     tipo: TipoEndereco.RESIDENCIAL,
                     logradouro: "",
                     complemento: "",
@@ -198,7 +198,7 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
     return (
         <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="flex justify-between items-center">
-                <TituloPagina titulo={"Pessoa"}
+                <TituloPagina titulo={"Fornecedor"}
                               subTitulo={!fornecedor?.id || fornecedor?.id === 0 ? ("Novo") : ("Atualizar")}/>
 
                 <Button color="gray" onClick={() => navigate("/fornecedores")} className="flex items-center gap-2">
@@ -213,12 +213,16 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
                     </Label>
                     <Seletor
                         enumType={TipoPessoa}
-                        value={formData.tipoPessoa || ""}
+                        value={formData.tipoPessoa || TipoPessoa.PESSOA_JURIDICA}
                         placeholder="Selecione o Tipo de Pessoa"
-                        onChange={(e) => setFormData({...formData, tipoPessoa: e as TipoPessoa})}/>
-                </div>
+                        onChange={(e) => {
+                            setFormData((prevState) => {
+                                return {...prevState, tipoPessoa: e as TipoPessoa};
+                            });
+                        }
+                        }/></div>
 
-                {formData.tipoPessoa === TipoPessoa.PESSOA_FISICA && (
+                {formData.tipoPessoa === "PESSOA_FISICA" && (
                     <div>
                         <Label htmlFor="nome" className="flex items-center">
                             Nome
@@ -236,7 +240,7 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
                     </div>
                 )}
 
-                {formData.tipoPessoa === TipoPessoa.PESSOA_JURIDICA && (
+                {formData.tipoPessoa === "PESSOA_JURIDICA" && (
                     <>
                         <div>
                             <Label htmlFor="nomeFantasia" className="flex items-center">

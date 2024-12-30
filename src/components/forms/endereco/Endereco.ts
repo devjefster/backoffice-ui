@@ -5,7 +5,7 @@ export enum TipoEndereco {
 }
 
 export interface Endereco {
-    id: number;
+    id: number|null;
     tipo: TipoEndereco;
     logradouro: string;
     complemento: string;

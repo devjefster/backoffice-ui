@@ -130,12 +130,14 @@ const CPFOrCNPJInput: React.FC<CPFOrCNPJInputProps> = ({
                 type="text"
                 value={value}
                 onChange={handleInputChange}
-                className={`mt-1 w-full rounded-lg border ${
-                    error ? "border-red-500 focus:ring-red-500 focus:border-red-500" : "border-gray-300"
-                } bg-gray-50 p-2.5 text-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500`}
+                className={`block w-full rounded-lg border ${
+                    error ? "border-red-500" : "border-gray-300"
+                } bg-gray-50 p-2.5 text-sm`}
                 placeholder="Digite CPF ou CNPJ"
-                maxLength={18} // Max length to accommodate CNPJ formatting
             />
+            {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+            {!error && value && <p className="text-green-500 text-sm mt-1">Válido!</p>}
+
             {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
         </div>
     );

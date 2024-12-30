@@ -22,10 +22,10 @@ import FormulaFabricacaoList from "@features/fabricacao/processos/pages/FormulaF
 import FormulaFabricacaoFormWrapper from "@features/fabricacao/processos/pages/FormulaFabricacaoFormWrapper";
 import HomePage from "./HomePage"; // Assuming ClienteService is used to fetch cliente data
 
-const FabricanteList = lazy(() => import("../features/fabricantes/pages/FabricanteList"));
-const FabricanteForm = lazy(() => import("../features/fabricantes/pages/FabricanteForm"));
-const FornecedorList = lazy(() => import("../features/fornecedores/pages/FornecedorList"));
-const FornecedorForm = lazy(() => import("../features/fornecedores/pages/FornecedorForm"));
+const FabricanteList = lazy(() => import("@features/pessoa/fabricantes/pages/FabricanteList"));
+const FabricanteForm = lazy(() => import("@features/pessoa/fabricantes/pages/FabricanteForm"));
+const FornecedorList = lazy(() => import("@features/pessoa/fornecedores/pages/FornecedorList"));
+const FornecedorForm = lazy(() => import("@features/pessoa/fornecedores/pages/FornecedorForm"));
 const ClienteList = lazy(() => import("../features/cliente/pages/ClienteList"));
 
 const App: React.FC = () => {

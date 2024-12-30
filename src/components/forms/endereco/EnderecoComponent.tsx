@@ -45,7 +45,9 @@ const EnderecoComponent: React.FC<EnderecoProps> = ({ endereco, onChange, onRemo
     };
 
     return (
+
         <div className="border p-4 rounded-lg space-y-4 bg-gray-50 relative">
+            <br/>
             <Button
                 color="failure"
                 size="sm"
@@ -55,7 +57,7 @@ const EnderecoComponent: React.FC<EnderecoProps> = ({ endereco, onChange, onRemo
                 Remover
             </Button>
             <div>
-                <Label value="Tipo de Endereço" />
+                <Label value="Tipo de Endereço"/>
                 <Select
                     value={endereco.tipo}
                     onChange={(e) => onChange("tipo", e.target.value)}

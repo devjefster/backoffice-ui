@@ -1,5 +1,4 @@
-import {Fabricante} from "@features/fabricantes/models/Fabricante";
-import {Fornecedor} from "@features/fornecedores/models/Fornecedor";
+import {Pessoa} from "@features/pessoa/model/Pessoa";
 
 export interface InsumoDTO {
     id: number;
@@ -7,8 +6,8 @@ export interface InsumoDTO {
     descricao: string;
     tipoInsumo: string; // Discriminador
     unidadeMedida: string;
-    fabricantes: Fabricante[];
-    fornecedores: Fornecedor[];
+    fabricantes: Pessoa[];
+    fornecedores: Pessoa[];
     grades: GradeCadastradaDTO[];
 }
 

@@ -8,8 +8,8 @@ import DataTable from "@components/table/DataTable";
 import CustomPagination from "@components/table/CustomPagination";
 import DeleteModal from "@components/comum/DeleteModal";
 import TypeAhead from "@components/inputs/TypeAhead";
-import FornecedorService from "@features/fornecedores/service/FornecedorService";
 import TituloPagina from "@components/comum/TituloPagina";
+import PessoaService from "@features/pessoa/service/PessoaService";
 
 
 const EntradaInsumosList = () => {
@@ -101,7 +101,7 @@ const EntradaInsumosList = () => {
                     onChange={(e) => setFilters({...filters, textoBusca: e.target.value})}
                 />
                 <TypeAhead
-                    fetchOptions={(query) => fetchPaginatedList(FornecedorService.listarComFiltros, query)}
+                    fetchOptions={(query) => fetchPaginatedList(PessoaService.listarComFiltros, query)}
                     onSelect={(selected) => setFilters({...filters, fornecedorId: selected.id})}
                     placeholder="Selecione o fornecedor"
                 />

@@ -4,8 +4,7 @@ import {HiCheckCircle, HiOutlinePlus, HiTrash} from "react-icons/hi";
 import {EntradaInsumoItemDTO, EntradaInsumosDTO} from "@features/entrada_insumos/model/EntradaInsumos";
 import TypeAhead from "@components/inputs/TypeAhead";
 import InsumoService from "@features/insumos/service/InsumoService";
-import FabricanteService from "@features/fabricantes/service/FabricanteService";
-import FornecedorService from "@features/fornecedores/service/FornecedorService";
+import PessoaService from "@features/pessoa/service/PessoaService";
 import {useNavigate} from "react-router-dom";
 import DataTable from "@components/table/DataTable";
 import DinheiroInput from "@components/inputs/DinheiroInput";
@@ -130,7 +129,7 @@ const EntradaInsumosForm: React.FC<{
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <Label htmlFor="fornecedor" className="text-gray-700 font-semibold">Fornecedor *</Label>
-                    <TypeAhead fetchOptions={(query) => fetchPaginatedList(FornecedorService.listarComFiltros, query)}
+                    <TypeAhead fetchOptions={(query) => fetchPaginatedList(PessoaService.listarComFiltros, query)}
                                onSelect={(selected) => handleChange("fornecedor", selected)}
                                placeholder="Selecione o fornecedor"/>
                 </div>
@@ -167,7 +166,7 @@ const EntradaInsumosForm: React.FC<{
                         placeholder="Selecione o insumo"
                     />
                     <TypeAhead
-                        fetchOptions={(query) => fetchPaginatedList(FabricanteService.listarComFiltros, query)}
+                        fetchOptions={(query) => fetchPaginatedList(PessoaService.listarComFiltros, query)}
                         onSelect={(selected) => handleNovoItemChange("fabricante", selected)}
                         placeholder="Selecione o fabricante"
                     />

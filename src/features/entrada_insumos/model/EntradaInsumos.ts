@@ -1,11 +1,10 @@
 import {GradeCadastradaDTO, InsumoDTO} from "@features/insumos/model/Insumo";
-import {Fabricante} from "@features/fabricantes/models/Fabricante";
-import {Fornecedor} from "@features/fornecedores/models/Fornecedor";
+import {Pessoa} from "@features/pessoa/model/Pessoa";
 
 export interface EntradaInsumoItemDTO {
     id?: number;
     insumo: InsumoDTO;
-    fabricante: Fabricante;
+    fabricante: Pessoa;
     quantidade: number; // BigDecimal mapped to number
     unidadeMedidaEntrada: number; // Enum UnidadeMedida as string
     precoUnitario: number;
@@ -16,7 +15,7 @@ export interface EntradaInsumoItemDTO {
 
 export interface EntradaInsumosDTO {
     id?: number;
-    fornecedor: Fornecedor | null;
+    fornecedor: Pessoa | null;
     dataEntrada: string; // ISO 8601 string for LocalDate
     custoFrete: number;
     custoOutros: number;

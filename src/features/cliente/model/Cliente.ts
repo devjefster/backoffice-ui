@@ -1,4 +1,4 @@
-import {Pessoa} from "../../../model/Pessoa";
+import {Pessoa} from "../../pessoa/model/Pessoa";
 import {Usuario} from "../../autenticacao/model/Usuario";
 
 export interface Cliente extends Pessoa {

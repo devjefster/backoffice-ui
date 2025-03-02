@@ -1,5 +1,4 @@
 import createAxiosInstance from "./CreateAxiosInstance";
-import {AUTH_API_URL} from "../../Constants";
-
-const autenticacaAxiosInstance = createAxiosInstance(AUTH_API_URL);
+const AUTH_URL = process.env.REACT_APP_AUTH_URL || "http://localhost:8081";
+const autenticacaAxiosInstance = createAxiosInstance(AUTH_URL);
 export default autenticacaAxiosInstance;

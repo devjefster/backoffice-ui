@@ -6,9 +6,9 @@ export interface EntradaInsumoItemDTO {
     insumo: InsumoDTO;
     fabricante: Pessoa;
     quantidade: number; // BigDecimal mapped to number
-    unidadeMedidaEntrada: number; // Enum UnidadeMedida as string
+    unidadeMedidaEntrada: string | null; // Enum UnidadeMedida as string
     precoUnitario: number;
-    validade?: string; // ISO 8601 string for LocalDate
+    validade?: string | null; // ISO 8601 string for LocalDate
     custoTotal: number;
     lote?: LoteEntradaDTO;
 }

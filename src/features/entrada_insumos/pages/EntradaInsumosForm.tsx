@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Label, Select, TableCell, TextInput} from "flowbite-react";
+import {Button, Label, TableCell, TextInput} from "flowbite-react";
 import {HiCheckCircle, HiOutlinePlus, HiTrash} from "react-icons/hi";
 import {EntradaInsumoItemDTO, EntradaInsumosDTO} from "@features/entrada_insumos/model/EntradaInsumos";
 import TypeAhead from "@components/inputs/TypeAhead";
@@ -9,16 +9,8 @@ import {useNavigate} from "react-router-dom";
 import DataTable from "@components/table/DataTable";
 import DinheiroInput from "@components/inputs/DinheiroInput";
 import TituloPagina from "@components/comum/TituloPagina";
-
-const UnidadeMedidaOptions = [
-    {label: "Litro (L)", value: "LITRO"},
-    {label: "Mililitro (ml)", value: "MILILITRO"},
-    {label: "Quilo (Kg)", value: "QUILO"},
-    {label: "Grama (g)", value: "GRAMA"},
-    {label: "Metro (m)", value: "METRO"},
-    {label: "Centímetro (cm)", value: "CENTIMETRO"},
-    {label: "Unidade (Un)", value: "UNIDADE"},
-];
+import {Enum} from "../../../model/Comum";
+import Seletor from "@components/comum/Seletor";
 
 const EntradaInsumosForm: React.FC<{
     entradaInsumo?: EntradaInsumosDTO | null;
@@ -26,7 +18,7 @@ const EntradaInsumosForm: React.FC<{
 }> = ({entradaInsumo, onSave}) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
-
+    const [unidadeMedidaOptions, setUnidadeMedidaOptions] = useState<Enum[]>([]);
     const [formData, setFormData] = useState<EntradaInsumosDTO>({
         id: 0,
         fornecedor: null,
@@ -38,13 +30,21 @@ const EntradaInsumosForm: React.FC<{
     const [novoItem, setNovoItem] = useState<Partial<EntradaInsumoItemDTO>>({
         quantidade: 0,
         precoUnitario: 0,
-        unidadeMedidaEntrada: 0,
-        validade: "",
+        unidadeMedidaEntrada: null,
+        validade: null,
         custoTotal: 0,
     });
-
+    const fetchEnums = async () => {
+        try {
+            const unidadesResponse = await InsumoService.obterUnidadeMedida();
+            setUnidadeMedidaOptions(unidadesResponse);
+        } catch (error) {
+            console.error("Erro ao carregar valores:", error);
+        }
+    };
     useEffect(() => {
         if (entradaInsumo) setFormData(entradaInsumo);
+        fetchEnums();
     }, [entradaInsumo]);
 
 
@@ -66,8 +66,8 @@ const EntradaInsumosForm: React.FC<{
         setNovoItem({
             quantidade: 0,
             precoUnitario: 0,
-            unidadeMedidaEntrada: 0,
-            validade: "",
+            unidadeMedidaEntrada: null,
+            validade: null,
             custoTotal: 0,
         });
     };
@@ -102,6 +102,12 @@ const EntradaInsumosForm: React.FC<{
             console.error("Error fetching paginated list:", error);
             return [];
         }
+    };
+    const handleEnumChange = (key: string, value: any) => {
+        setNovoItem((prev) => ({
+            ...prev,
+            [key]: value === "" ? null : value // Se for vazio, define como null
+        }));
     };
 
     const custoTotal = () => {
@@ -181,17 +187,12 @@ const EntradaInsumosForm: React.FC<{
                         onChange={(value) => handleNovoItemChange("precoUnitario", parseCurrency(value))}
                         placeholder="Custo Outros"
                     />
-                    <Select
-                        value={novoItem.unidadeMedidaEntrada || ""}
-                        onChange={(e) => handleNovoItemChange("unidadeMedidaEntrada", e.target.value)}
-                    >
-                        <option value="">Selecione a Unidade</option>
-                        {UnidadeMedidaOptions.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </Select>
+                    <Seletor
+                        enums={unidadeMedidaOptions}
+                        value={novoItem.unidadeMedidaEntrada}
+                        placeholder="Selecione a Unidade de Medida"
+                        onChange={(e) => handleEnumChange("unidadeMedida", e)}
+                    />
                     <Button gradientDuoTone="greenToBlue" onClick={addItem}>
                         <HiOutlinePlus className="mr-2"/>
                         Adicionar Item
@@ -204,7 +205,7 @@ const EntradaInsumosForm: React.FC<{
                             {key: "insumo", label: "Insumo"},
                             {key: "fabricante", label: "Fabricante"},
                             {key: "precoUnitario", label: "Preço Unitário"},
-                            {key: "precoUnitario", label: "Preço Total"},
+                            {key: "precoTotal", label: "Preço Total"},
                             {key: "acoes", label: "Ações"},
                         ]}
                         renderRow={(item, index) => (
@@ -213,7 +214,7 @@ const EntradaInsumosForm: React.FC<{
                                 <TableCell>{item.fabricante.nomeFantasia}%</TableCell>
                                 <TableCell>{formatCurrency(item.precoUnitario)}</TableCell>
                                 <TableCell>{item.unidadeMedidaEntrada}</TableCell>
-                                <TableCell>{formatCurrency(item.precoUnitario * item.unidadeMedidaEntrada)}</TableCell>
+                                <TableCell>{formatCurrency(item.precoUnitario * item.quantidade)}</TableCell>
                                 <TableCell>
                                     <Button color="failure" size="sm" onClick={() => removeItem(index)}>
                                         <HiTrash className="w-5 h-5"/>

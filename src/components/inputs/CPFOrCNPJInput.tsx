@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Tooltip } from "flowbite-react";
+import React, {useState} from "react";
+import {Tooltip} from "flowbite-react";
 
 interface CPFOrCNPJInputProps {
     value: string;

@@ -1,4 +1,4 @@
-import { format, parseISO } from "date-fns";
+import {format, parseISO} from "date-fns";
 
 export const formatarData = (dateString: string | undefined): string => {
     if (!dateString) return "N/A";

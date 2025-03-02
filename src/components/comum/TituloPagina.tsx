@@ -1,7 +1,7 @@
-import React, { ReactElement } from "react";
-import { Button } from "flowbite-react";
-import { HiArrowLeft } from "react-icons/hi";
-import { NavigateFunction } from "react-router-dom";
+import React, {ReactElement} from "react";
+import {Button} from "flowbite-react";
+import {HiArrowLeft} from "react-icons/hi";
+import {NavigateFunction} from "react-router-dom";
 
 interface TituloPaginaProps {
     titulo: string;

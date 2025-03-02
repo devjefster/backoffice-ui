@@ -1,4 +1,4 @@
-import { faCogs, faHome, faIndustry, faList, faTruck, faUser } from "@fortawesome/free-solid-svg-icons";
+import {faCogs, faHome, faIndustry, faList, faTruck} from "@fortawesome/free-solid-svg-icons";
 
 export const itensMenu = [
     { path: "/home", label: "Home", icon: faHome },

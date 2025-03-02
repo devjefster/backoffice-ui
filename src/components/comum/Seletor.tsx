@@ -1,6 +1,6 @@
 import React from "react";
-import { Select } from "flowbite-react";
-import { Enum } from "../../model/Comum";
+import {Select} from "flowbite-react";
+import {Enum} from "../../model/Comum";
 
 interface SeletorProps<T> {
     value?: string | null; // The selected value (enum value)

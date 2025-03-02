@@ -1,8 +1,9 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { itensMenu } from "../model/ItensMenu";
+import {NavLink} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {itensMenu} from "../model/ItensMenu";
 import {faCircle} from "@fortawesome/free-solid-svg-icons"
+
 const HomePage: React.FC = () => {
     return (
         <div className="p-6">

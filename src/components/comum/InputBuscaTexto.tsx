@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { TextInput } from "flowbite-react";
-import { HiOutlineSearch } from "react-icons/hi";
+import React, {useState} from "react";
+import {TextInput} from "flowbite-react";
+import {HiOutlineSearch} from "react-icons/hi";
 
 interface TextoBuscaInputProps {
     val?: string;

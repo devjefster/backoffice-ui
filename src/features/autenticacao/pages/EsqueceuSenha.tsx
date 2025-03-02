@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { sendResetPasswordEmail } from "../service/loginService";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {sendResetPasswordEmail} from "../service/loginService";
+import {useNavigate} from "react-router-dom";
 
 const EsqueceuSenha: React.FC = () => {
     const [email, setEmail] = useState<string>(""); // Explicit typing

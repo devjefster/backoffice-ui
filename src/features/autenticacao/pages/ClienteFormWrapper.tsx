@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import ClienteService from "../../cliente/service/ClienteService";
 import {Cliente} from "../../cliente/model/Cliente";
 import Loader from "@components/Loader";

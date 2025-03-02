@@ -1,5 +1,4 @@
 import {Endereco} from "@components/forms/endereco/Endereco";
-import {Contato} from "@components/forms/contato/model/Contato";
 
 export interface FiltrosPessoa {
     nome: string | null,

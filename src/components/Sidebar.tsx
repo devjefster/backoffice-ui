@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { Sidebar as FlowbiteSidebar } from "flowbite-react";
-import { HiChevronDown, HiChevronRight } from "react-icons/hi";
+import React, {useState} from "react";
+import {NavLink} from "react-router-dom";
+import {Sidebar as FlowbiteSidebar} from "flowbite-react";
+import {HiChevronDown, HiChevronRight} from "react-icons/hi";
 import logo from "../assets/images/logo.png";
-import { itensMenu } from "../model/ItensMenu";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {itensMenu} from "../model/ItensMenu";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);

@@ -1,8 +1,8 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import EntradaInsumosService from "@features/entrada_insumos/service/EntradaInsumosService";
 import Loader from "@components/Loader";
-import { EntradaInsumosDTO } from "@features/entrada_insumos/model/EntradaInsumos";
+import {EntradaInsumosDTO} from "@features/entrada_insumos/model/EntradaInsumos";
 import EntradaInsumosForm from "@features/entrada_insumos/pages/EntradaInsumosForm";
 
 const EntradaInsumoFormWrapper: React.FC = () => {

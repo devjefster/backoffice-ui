@@ -2,9 +2,9 @@ import React, {useCallback, useEffect, useState} from "react";
 import ClienteService from "../service/ClienteService";
 import DataTable from "../../../components/table/DataTable";
 import CustomPagination from "../../../components/table/CustomPagination";
-import { Button, Spinner, TableCell, TextInput } from "flowbite-react";
-import { useNavigate } from "react-router-dom";
-import { HiOutlineSearch } from "react-icons/hi";
+import {Button, Spinner, TableCell, TextInput} from "flowbite-react";
+import {useNavigate} from "react-router-dom";
+import {HiOutlineSearch} from "react-icons/hi";
 import {Cliente} from "../model/Cliente";
 
 const ClienteList = () => {

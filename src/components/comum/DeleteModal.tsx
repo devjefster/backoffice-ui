@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Button, Modal, Tooltip, Spinner } from "flowbite-react";
-import { HiOutlineExclamationCircle, HiTrash } from "react-icons/hi";
+import React, {useState} from "react";
+import {Button, Modal, Spinner, Tooltip} from "flowbite-react";
+import {HiOutlineExclamationCircle, HiTrash} from "react-icons/hi";
 
 interface DeleteModalProps {
     isOpen: boolean; // Whether the modal is open

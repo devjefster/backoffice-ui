@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { loginUser } from "../service/loginService";
-import { useAuth } from "@utils/contexts/AuthContext";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {loginUser} from "../service/loginService";
+import {useAuth} from "@utils/contexts/AuthContext";
 import avatar1 from "@assets/images/avatar/avatar1.png";
 
 const LoginPage: React.FC = () => {

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Button, Label, Checkbox, Textarea } from "flowbite-react";
-import { Contato, TipoContato } from "./model/Contato";
-import { FaWhatsapp, FaTelegramPlane } from "react-icons/fa";
+import React, {useEffect, useState} from "react";
+import {Button, Checkbox, Label, Textarea} from "flowbite-react";
+import {Contato, TipoContato} from "./model/Contato";
+import {FaTelegramPlane, FaWhatsapp} from "react-icons/fa";
 import EmailInput from "../../../components/inputs/EmailInput";
 import TelefoneInput from "../../../components/inputs/TelefoneInput";
 

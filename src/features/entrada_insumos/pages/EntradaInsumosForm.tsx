@@ -16,7 +16,7 @@ const EntradaInsumosForm: React.FC<{
     entradaInsumo?: EntradaInsumosDTO | null;
     onSave: (formData: EntradaInsumosDTO) => void
 }> = ({entradaInsumo, onSave}) => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting] = useState(false);
     const navigate = useNavigate();
     const [unidadeMedidaOptions, setUnidadeMedidaOptions] = useState<Enum[]>([]);
     const [formData, setFormData] = useState<EntradaInsumosDTO>({

@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
-import { atualizarUsuario, buscarUsuarioPeloId } from "../service/userService";
-import { Usuario, AtualizarUsuario } from "../model/Usuario";
-import { useNavigate } from "react-router-dom";
-import { Button, Spinner, Tooltip } from "flowbite-react";
+import React, {useEffect, useRef, useState} from "react";
+import {atualizarUsuario, buscarUsuarioPeloId} from "../service/userService";
+import {AtualizarUsuario, Usuario} from "../model/Usuario";
+import {useNavigate} from "react-router-dom";
+import {Button, Spinner, Tooltip} from "flowbite-react";
 import EmailInput from "@components/inputs/EmailInput";
 import TelefoneInput from "@components/inputs/TelefoneInput";
-import { HiOutlineInformationCircle } from "react-icons/hi";
+import {HiOutlineInformationCircle} from "react-icons/hi";
 
 const Perfil: React.FC = () => {
     const [userData, setUserData] = useState<Usuario>({

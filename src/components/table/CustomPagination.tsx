@@ -1,5 +1,5 @@
 import React from "react";
-import { Pagination } from "flowbite-react";
+import {Pagination} from "flowbite-react";
 
 interface PaginationProps {
     pagination: {

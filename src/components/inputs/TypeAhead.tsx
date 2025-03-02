@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Label, TextInput} from "flowbite-react";
+import {TextInput} from "flowbite-react";
 
 interface TypeAheadProps {
     fetchOptions: (query: string) => Promise<any[]>;

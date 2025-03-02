@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Table } from "flowbite-react";
+import React, {useState} from "react";
+import {Table} from "flowbite-react";
 
 interface TableHeader {
     key: string;

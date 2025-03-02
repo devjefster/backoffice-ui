@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Button, Label, Select, Textarea, TextInput } from "flowbite-react";
-import { Endereco, TipoEndereco } from "./Endereco";
+import React, {useState} from "react";
+import {Button, Label, Select, Textarea, TextInput} from "flowbite-react";
+import {Endereco, TipoEndereco} from "./Endereco";
 
 interface EnderecoProps {
     endereco: Endereco;

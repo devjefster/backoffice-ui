@@ -1,5 +1,5 @@
 import React from "react";
-import { TextInput } from "flowbite-react";
+import {TextInput} from "flowbite-react";
 import InputMask from "react-input-mask";
 
 interface DinheiroInputProps {

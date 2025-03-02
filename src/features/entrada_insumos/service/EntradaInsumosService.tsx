@@ -1,4 +1,4 @@
-import { PaginatedResponse } from "../../../model/PaginatedResponse";
+import {PaginatedResponse} from "../../../model/PaginatedResponse";
 import axiosInstance from "../../../utils/config/seguranca/AxiosInstance";
 import {EntradaInsumosDTO} from "@features/entrada_insumos/model/EntradaInsumos";
 

@@ -3,11 +3,12 @@ import { Select } from "flowbite-react";
 import { Enum } from "../../model/Comum";
 
 interface SeletorProps<T> {
-    value?: string; // The selected value (enum value)
+    value?: string | null; // The selected value (enum value)
     placeholder?: string;
     enums?: Enum[]; // Predefined key-value pairs for the dropdown
     enumType?: T; // The TypeScript enum
-    onChange: (selectedKey: string) => void; // Callback with the selected value
+    onChange: (selectedKey: string | null) => void;
+
     labelTransform?: (key: keyof T) => string; // Optional transformation for readable labels
 }
 
@@ -20,9 +21,10 @@ const Seletor = <T extends Record<string, string>>({
                                                        labelTransform,
                                                    }: SeletorProps<T>) => {
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        console.log('handleChange',e.target.value)
-        onChange(e.target.value);
+        const selectedValue = e.target.value === "" ? null : e.target.value;
+        onChange(selectedValue);
     };
+
 
     // Transform enums or enumType into options
     const getOptions = () => {
@@ -46,7 +48,7 @@ const Seletor = <T extends Record<string, string>>({
     const options = getOptions();
 
     return (
-        <Select value={value} onChange={handleChange} className="w-full">
+        <Select value={value ?? ""} onChange={handleChange} className="w-full">
             <option value="">{placeholder || "Selecione uma opção"}</option>
             {options.map((option) => (
                 <option key={option.key} value={option.value}>

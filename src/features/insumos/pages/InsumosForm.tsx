@@ -18,22 +18,23 @@ const InsumoForm: React.FC<{
           onSave,
       }) => {
     const [formData, setFormData] = useState<InsumoDTO>({
-        aplicacao: "",
-        dimensoes: "",
-        especificacoesTecnicas: "",
-        material: "",
-        tipoConsumivel: "",
-        tipoEmbalagem: "",
-        tipoMateriaPrima: "",
+        aplicacao: null,
+        dimensoes: null,
+        especificacoesTecnicas: null,
+        material: null,
+        tipoConsumivel: null, // Permite valores opcionais
+        tipoEmbalagem: null,
+        tipoMateriaPrima: null,
         id: 0,
         nome: "",
         descricao: "",
-        tipoInsumo: "",
-        unidadeMedida: "",
+        tipo: null,
+        unidadeMedida: null,
         fabricantes: [],
         fornecedores: [],
         grades: []
     });
+
     const [tipoOptions, setTipoOptions] = useState<Enum[]>([]);
     const [tipoMaterialPrima, setTipoMaterialPrima] = useState<Enum[]>([]);
     const [tipoEmbalagens, setTipoEmbalagens] = useState<Enum[]>([]);
@@ -42,7 +43,17 @@ const InsumoForm: React.FC<{
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (insumo) setFormData(insumo);
+        if (insumo) {
+            setFormData((prev) => ({
+                ...prev,
+                ...insumo,
+                tipo: insumo.tipo || null,
+                unidadeMedida: insumo.unidadeMedida || null,
+                tipoMateriaPrima: insumo.tipoMateriaPrima || null,
+                tipoConsumivel: insumo.tipoConsumivel || null,
+                tipoEmbalagem: insumo.tipoEmbalagem || null,
+            }));
+        }
         fetchNums();
     }, [insumo]);
 
@@ -64,17 +75,29 @@ const InsumoForm: React.FC<{
     };
 
     const handleChange = (key: string, value: any) => {
-        setFormData((prev) => ({...prev, [key]: value}));
+        setFormData((prev) => ({
+            ...prev,
+            [key]: value === "" ? null : value // Se for vazio, define como null
+        }));
     };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            const sanitizedData = {
+                ...formData,
+                tipo: formData.tipo || null,
+                unidadeMedida: formData.unidadeMedida || null,
+                tipoMateriaPrima: formData.tipoMateriaPrima || null,
+                tipoConsumivel: formData.tipoConsumivel || null,
+                tipoEmbalagem: formData.tipoEmbalagem || null
+            };
             if (formData.id && formData.id > 0) {
-                const updated = await InsumoService.atualizar(formData.id, formData);
+                const updated = await InsumoService.atualizar(formData.id, sanitizedData);
                 onSave(updated.data);
             } else {
-                const created = await InsumoService.criar(formData);
+                const created = await InsumoService.criar(sanitizedData);
                 onSave(created.data);
             }
         } catch (error) {
@@ -119,38 +142,36 @@ const InsumoForm: React.FC<{
                             />
                         </div>
                         <div className="flex flex-col">
-                            <Label htmlFor="tipoInsumo">Tipo de Insumo</Label>
+                            <Label htmlFor="tipo">Tipo de Insumo</Label>
                             <Seletor
                                 enums={tipoOptions}
-                                value={formData.tipoInsumo}
+                                value={formData.tipo}
                                 placeholder="Selecione o Tipo de Insumo"
-                                onChange={(e) => handleChange("tipoInsumo", e)}
+                                onChange={(e) => handleChange("tipo", e)}
                             />
                         </div>
                         <div className="flex flex-col">
-                            <Label htmlFor="tipoInsumo">Unidade Medida</Label>
+                            <Label htmlFor="tipo">Unidade Medida</Label>
                             <Seletor
                                 enums={unidadeMedidaOptions}
                                 value={formData.unidadeMedida}
                                 placeholder="Selecione a Unidade de Medida"
-                                onChange={(e) => handleChange("tipoUnidade", e)}
+                                onChange={(e) => handleChange("unidadeMedida", e)}
                             />
                         </div>
 
                     </div>
                     <div className="mt-5 grid grid-cols-2 md:grid-cols-2 gap-6">
-                        {formData.tipoInsumo === "MATERIA_PRIMA" && (
+                        {formData.tipo === "MATERIA_PRIMA" && (
                             <>
                                 <div className="flex flex-col">
-                                    <Label htmlFor="tipoInsumo">Tipo Matéria Prima</Label>
+                                    <Label htmlFor="tipo">Tipo Matéria Prima</Label>
                                     <Seletor
                                         enums={tipoMaterialPrima}
                                         value={formData.tipoMateriaPrima}
                                         placeholder="Selecione o Tipo de matéria prima"
                                         onChange={(e) => {
-                                            setFormData((prevState) => {
-                                                return {...prevState, tipoPessoa: e as string};
-                                            });
+                                            handleChange("tipoMateriaPrima",e)
                                         }}
                                     />
                                 </div>
@@ -163,14 +184,13 @@ const InsumoForm: React.FC<{
                                         type="text"
                                         placeholder="Digite as Especificações Técnicas"
                                         value={formData.especificacoesTecnicas || ""}
-                                        onChange={(e) => handleChange("especificacoesTecnicas", e.target.value)}
-                                        required/>
+                                        onChange={(e) => handleChange("especificacoesTecnicas", e.target.value)}/>
                                 </div>
                             </>
                         )}
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-2 gap-6">
-                        {formData.tipoInsumo === "CONSUMIVEIS" && (
+                        {formData.tipo === "CONSUMIVEIS" && (
                             <>
                                 <div className="flex flex-col">
                                     <Label htmlFor="tipoConsumivel">Tipo de Consumíveis</Label>
@@ -179,9 +199,7 @@ const InsumoForm: React.FC<{
                                         value={formData.tipoConsumivel}
                                         placeholder="Selecione o Tipo Consumível"
                                         onChange={(e) => {
-                                            setFormData((prevState) => {
-                                                return {...prevState, tipoConsumivel: e as string};
-                                            });
+                                            handleChange("tipoConsumivel",e)
                                         }}
                                     />
                                 </div>
@@ -194,25 +212,22 @@ const InsumoForm: React.FC<{
                                         type="text"
                                         placeholder="Digite as Especificações Técnicas"
                                         value={formData.aplicacao || ""}
-                                        onChange={(e) => handleChange("aplicacao", e.target.value)}
-                                        required/>
+                                        onChange={(e) => handleChange("aplicacao", e.target.value)}/>
                                 </div>
                             </>
                         )}
                     </div>
                     <div className="grid grid-cols-3 md:grid-cols-3 gap-6">
-                        {formData.tipoInsumo === "EMBALAGEM" && (
+                        {formData.tipo === "EMBALAGEM" && (
                             <>
                                 <div className="flex flex-col">
-                                    <Label htmlFor="tipoInsumo">Tipo de Embalagem</Label>
+                                    <Label htmlFor="tipo">Tipo de Embalagem</Label>
                                     <Seletor
                                         enums={tipoEmbalagens}
                                         value={formData.tipoEmbalagem}
                                         placeholder="Selecione o Tipo de matéria prima"
                                         onChange={(e) => {
-                                            setFormData((prevState) => {
-                                                return {...prevState, tipoEmbalagem: e as string};
-                                            });
+                                            handleChange("tipoEmbalagem",e)
                                         }}
                                     />
                                 </div>
@@ -225,8 +240,7 @@ const InsumoForm: React.FC<{
                                         type="text"
                                         placeholder="Digite as Dimensões"
                                         value={formData.dimensoes || ""}
-                                        onChange={(e) => handleChange("dimensoes", e.target.value)}
-                                        required/>
+                                        onChange={(e) => handleChange("dimensoes", e.target.value)} required/>
                                 </div>
                                 <div>
                                     <Label htmlFor="material" className="flex items-center">
@@ -237,14 +251,13 @@ const InsumoForm: React.FC<{
                                         type="text"
                                         placeholder="Digite o Material"
                                         value={formData.material || ""}
-                                        onChange={(e) => handleChange("material", e.target.value)}
-                                        required/>
+                                        onChange={(e) => handleChange("material", e.target.value)} required/>
                                 </div>
                             </>
                         )}
                     </div>
                     <div className="flex justify-end gap-4 mt-6">
-                        <Button type="button" color="gray" onClick={() => navigate("/insumos")}>
+                        <Button type="button" color="gray" onClick={() => navigate("/insumos/cadastro")}>
                             Cancelar
                         </Button>
                         <Button type="submit" gradientDuoTone="cyanToBlue">

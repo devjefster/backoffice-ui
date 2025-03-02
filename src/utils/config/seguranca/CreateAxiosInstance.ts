@@ -8,6 +8,7 @@ const createAxiosInstance = (baseURL: string): AxiosInstance => {
         headers: {
             'Content-Type': 'application/json',
         },
+        withCredentials: true,
     });
 
     instance.interceptors.request.use(

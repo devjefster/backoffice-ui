@@ -13,7 +13,7 @@ import DeleteModal from "@components/comum/DeleteModal";
 
 const InsumoList = () => {
     const [insumos, setInsumos] = useState<InsumoDTO[]>([]);
-    const [filters, setFilters] = useState({textoBusca: "", tipoInsumo: "", unidadeMedida: ""});
+    const [filters, setFilters] = useState({textoBusca: "", tipo: "", unidadeMedida: ""});
     const [pagination, setPagination] = useState({page: 0, size: 10, totalPages: 0});
     const [isLoading, setIsLoading] = useState(false);
     const [tiposInsumo, setTiposInsumo] = useState<{ chave: string; valor: string }[]>([]);
@@ -25,7 +25,7 @@ const InsumoList = () => {
     const fetchInsumos = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await InsumoService.listarComFiltros(filters.textoBusca, filters.tipoInsumo, pagination.page, pagination.size);
+            const response = await InsumoService.listarComFiltros(filters.textoBusca, filters.tipo, pagination.page, pagination.size);
             if (response) {
                 setInsumos(response.content || []);
                 setPagination((prev) => ({...prev, totalPages: response.totalPages}));
@@ -54,7 +54,7 @@ const InsumoList = () => {
     }, [fetchInsumos]);
 
     const handleResetFilters = () => {
-        setFilters({textoBusca: "", tipoInsumo: "", unidadeMedida: ""});
+        setFilters({textoBusca: "", tipo: "", unidadeMedida: ""});
         fetchInsumos();
     };
 
@@ -77,6 +77,13 @@ const InsumoList = () => {
         setIsDeleteModalOpen(false);
         setInsumoToDelete(null)
     };
+    const handleChange = (key: string, value: any) => {
+        setFilters((prev) => ({
+            ...prev,
+            [key]: value === "" ? null : value // Se for vazio, define como null
+        }));
+    };
+
     return (
         <div className="bg-gradient-to-b from-background to-background-alt">
             <TituloPagina titulo="Insumo" subTitulo="Listagem"/>
@@ -91,31 +98,31 @@ const InsumoList = () => {
 
                 <Seletor
                     enums={tiposInsumo}
-                    value={filters.tipoInsumo}
+                    value={filters.tipo}
                     placeholder="Selecione o Tipo de Insumo"
-                    onChange={(e) => setFilters({...filters, tipoInsumo: e})}
+                    onChange={(e) => handleChange("tipo",e)}
                 />
 
                 <Seletor
                     enums={unidadesMedida}
                     value={filters.unidadeMedida}
                     placeholder="Selecione a Unidade de Medida"
-                    onChange={(e) => setFilters({...filters, unidadeMedida: e})}
+                    onChange={(e) => handleChange("unidadeMedida",e)}
                 />
             </div>
             <div className="flex justify-end mb-6 space-x-4">
-                <Button gradientDuoTone="purpleToBlue" onClick={fetchInsumos} disabled={isLoading}>
-                    <HiOutlineSearch className="mr-2"/>
+                <Button gradientDuoTone="purpleToBlue" onClick={fetchInsumos} disabled={isLoading} className="flex items-center gap-2">
+                    <HiOutlineSearch className="w-5 h-5"/>
                     {isLoading ? "Carregando..." : "Filtrar"}
                 </Button>
 
-                <Button color="gray" onClick={handleResetFilters}>
-                    <HiOutlineX className="mr-2"/>
+                <Button color="gray" onClick={handleResetFilters}  className="flex items-center gap-2">
+                    <HiOutlineX className="w-5 h-5"/>
                     Limpar Filtros
                 </Button>
 
-                <Button gradientDuoTone="greenToBlue" onClick={() => navigate("/insumos/:new")}>
-                    <HiPlus className="mr-2"/>
+                <Button gradientDuoTone="greenToBlue" onClick={() => navigate("/insumos/:new")}  className="flex items-center gap-2">
+                    <HiPlus className="w-5 h-5"/>
                     Novo Insumo
                 </Button>
             </div>
@@ -130,17 +137,17 @@ const InsumoList = () => {
                     headers={[
                         {key: "nome", label: "Nome", sortable: true},
                         {key: "descricao", label: "Descrição"},
-                        {key: "tipoInsumo", label: "Tipo", sortable: true},
+                        {key: "tipo", label: "Tipo", sortable: true},
                         {key: "acoes", label: "Ações"},
                     ]}
                     renderRow={(insumo) => (
                         <>
                             <TableCell>{insumo.nome}</TableCell>
                             <TableCell>{insumo.descricao}</TableCell>
-                            <TableCell>{insumo.tipoInsumo}</TableCell>
+                            <TableCell>{insumo.tipo}</TableCell>
                             <TableCell>
                                 <div className="flex gap-2">
-                                    <Button size="xs" onClick={() => navigate(`/insumos/${insumo.id}/edit`)}>
+                                    <Button size="xs" onClick={() => navigate(`/insumos/${insumo.id}/edit`)} className="flex items-center gap-2">
                                         <HiPencil className="mr-1"/> Editar
                                     </Button>
                                     <Button

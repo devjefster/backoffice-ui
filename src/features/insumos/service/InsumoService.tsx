@@ -8,11 +8,11 @@ const handleError = (error: any) => {
 };
 
 const InsumoService = {
-    listarComFiltros: async (textoBusca?: string, tipoInsumo?: string, page: number = 0, size: number = 10) => {
+    listarComFiltros: async (textoBusca?: string, tipo?: string, page: number = 0, size: number = 10) => {
         try {
             const params = new URLSearchParams();
             if (textoBusca) params.append("textoBusca", textoBusca);
-            if (tipoInsumo) params.append("tipo", tipoInsumo);
+            if (tipo) params.append("tipo", tipo);
             params.append("page", page.toString());
             params.append("size", size.toString());
             const response = await axiosInstance.get<PaginatedResponse<InsumoDTO>>("/insumos", {params});
@@ -52,10 +52,10 @@ const InsumoService = {
         }
     },
 
-    obterSubtiposPorTipoInsumo: async (tipoInsumo: string) => {
+    obterSubtiposPorTipoInsumo: async (tipo: string) => {
         try {
             const response = await axiosInstance.get<{ chave: string; valor: string }[]>(
-                `/insumos/subtipos-insumo/${tipoInsumo}`
+                `/insumos/subtipos-insumo/${tipo}`
             );
             return response.data;
         } catch (error) {

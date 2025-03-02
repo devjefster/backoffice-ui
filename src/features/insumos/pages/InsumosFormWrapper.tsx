@@ -31,7 +31,7 @@ const InsumoWrapper: React.FC = () => {
         }
     }, [id]);
     const handleSave = () => {
-        navigate("/insumos/entrada");
+        navigate("/insumos/cadastros");
     };
 
     if (isLoading) {

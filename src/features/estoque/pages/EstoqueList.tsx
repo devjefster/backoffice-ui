@@ -30,7 +30,10 @@ const EstoqueList: React.FC = () => {
             const data = await EstoqueService.listarEstoques(filters, pagination.page, pagination.size);
             if (data) {
                 setEstoques(data.content);
-                setPagination((prev) => ({...prev, totalPages: data.totalPages}));
+                setPagination((prev) => ({
+                    ...prev,
+                    totalPages: data.page?.totalPages ?? 1,
+                }));
             }
         } catch (err) {
             console.error("Erro ao carregar os estoques:", err);
@@ -38,7 +41,9 @@ const EstoqueList: React.FC = () => {
             setIsLoading(false);
         }
     }, [filters, pagination.page, pagination.size]);
-
+    const handlePaginationChange = (newPage: number, newSize: number) => {
+        setPagination({page: newPage, size: newSize, totalPages: pagination.totalPages});
+    };
     useEffect(() => {
         fetchEstoques();
     }, [fetchEstoques]);
@@ -163,10 +168,12 @@ const EstoqueList: React.FC = () => {
                     )}
                 />
             </div>
-            <CustomPagination pagination={pagination} setPagination={setPagination}/>
+            <CustomPagination
+                pagination={pagination}
+                onPaginationChange={handlePaginationChange} // Single callback
+            />
         </div>
     )
-        ;
 };
 
 export default EstoqueList;

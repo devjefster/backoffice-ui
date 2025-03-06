@@ -1,39 +1,53 @@
-import React from "react";
-import {TextInput} from "flowbite-react";
-import InputMask from "react-input-mask";
+import React, { useState } from "react";
+import { TextInput } from "flowbite-react";
 
 interface DinheiroInputProps {
-    value: string;
-    onChange: (value: string) => void;
+    value: number | string;
+    onChange: (value: number) => void;
     label?: string;
     placeholder?: string;
 }
 
 const DinheiroInput: React.FC<DinheiroInputProps> = ({ value, onChange, label, placeholder }) => {
+    const [inputValue, setInputValue] = useState(value.toString()); // Store user input separately
+
+    const formatCurrency = (value: number | string) => {
+        const numValue = Number(value);
+        if (isNaN(numValue) || numValue === 0) return "R$ 0,00"; // Ensure correct default
+        return new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+            minimumFractionDigits: 2,
+        }).format(numValue);
+    };
+
+    const parseCurrency = (inputValue: string) => {
+        // Remove everything except digits and commas
+        let numericValue = inputValue.replace(/[^\d,]/g, "").replace(",", ".");
+        return numericValue ? parseFloat(numericValue) : 0; // Avoid NaN values
+    };
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const maskedValue = e.target.value;
-        // Remove todos os caracteres que não são dígitos ou vírgulas e substitui vírgula por ponto
-        const numericValue = maskedValue.replace(/[^\d,]/g, "").replace(",", ".");
-        onChange(numericValue);
+        const rawValue = e.target.value;
+        setInputValue(rawValue); // Allow user to type freely
+    };
+
+    const handleBlur = () => {
+        const numericValue = parseCurrency(inputValue);
+        onChange(numericValue); // Notify parent
+        setInputValue(formatCurrency(numericValue)); // Format display on blur
     };
 
     return (
         <div>
             {label && <label className="block mb-2 text-sm font-medium text-gray-700">{label}</label>}
-            <InputMask
-                mask="R$ 999.999.999,99"
-                value={value ? `R$ ${value}` : ""}
+            <TextInput
+                value={inputValue}
                 onChange={handleInputChange}
-                maskChar={null}
-            >
-                {(inputProps) => (
-                    <TextInput
-                        {...inputProps}
-                        placeholder={placeholder || "R$ 0,00"}
-                        className="rounded-md"
-                    />
-                )}
-            </InputMask>
+                onBlur={handleBlur} // Format when the user leaves the input
+                placeholder={placeholder || "R$ 0,00"}
+                className="rounded-md"
+            />
         </div>
     );
 };

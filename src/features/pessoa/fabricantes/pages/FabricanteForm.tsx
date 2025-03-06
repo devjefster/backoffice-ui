@@ -28,7 +28,6 @@ const FabricanteForm: React.FC<{ fabricante?: Pessoa | null; onSave: (formData: 
             email: "",
             emailSecundario: "",
             telefone: "",
-
             telefoneSecundario: "",
             tipo: TipoCadastro[TipoCadastro.FABRICANTE],
             tipoPessoa: "PESSOA_JURIDICA", // Valor padrão para evitar null
@@ -299,19 +298,17 @@ const FabricanteForm: React.FC<{ fabricante?: Pessoa | null; onSave: (formData: 
                 )}
                 <CPFOrCNPJInput
                     value={formData.cpfCnpj || ""}
-                    onChange={(value) => handleChange("cpfCnpj", value)}
-                    label="CPF ou CNPJ"
-                    required/>
+                    onChange={(value) => handleChange("cpfCnpj", value)}/>
                 <EmailInput
                     value={formData.email || ""}
                     onChange={(value) => handleChange("email", value)}
                     label="E-mail"
-                    required/>
+                />
                 <TelefoneInput
                     value={formData.telefone || ""}
                     onChange={(value) => handleChange("telefone", value)}
                     label="Telefone"
-                    required/>
+                />
                 <TelefoneInput
                     value={formData.telefoneSecundario || ""}
                     onChange={(value) => handleChange("telefoneSecundario", value)}

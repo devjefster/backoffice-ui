@@ -4,9 +4,9 @@ FROM node:18-alpine AS build
 WORKDIR /app
 
 COPY package.json tsconfig.json craco.config.ts ./
-COPY yarn.lock ./
+COPY package-lock.json ./
 
-RUN yarn install --frozen-lockfile
+RUN npm install --frozen-lockfile
 
 COPY . .
 

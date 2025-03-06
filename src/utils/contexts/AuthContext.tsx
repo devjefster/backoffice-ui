@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {clearAuthToken, getAuthToken} from "../config/utils/AuthUtils";
-import {validateToken} from "../../features/autenticacao/service/loginService";
+import {validateToken} from "@features/autenticacao/service/loginService";
 
 interface AuthContextProps {
     isAuthenticated: boolean;
@@ -11,7 +11,7 @@ interface AuthContextProps {
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -42,7 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
+        <AuthContext.Provider value={{isAuthenticated, isLoading, login, logout}}>
             {children}
         </AuthContext.Provider>
     );

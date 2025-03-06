@@ -31,7 +31,10 @@ const FabricantesList = () => {
             const data = await PessoaService.listarComFiltros(filtros, pagination.page, pagination.size);
             if (data) {
                 setFabricantes(data.content);
-                setPagination((prev) => ({...prev, totalPages: data.totalPages}));
+                setPagination((prev) => ({
+                    ...prev,
+                    totalPages: data.page?.totalPages ?? 1,
+                }));
             }
         } catch (err) {
             console.error("Erro ao carregar os fabricantes:", err);
@@ -41,7 +44,9 @@ const FabricantesList = () => {
         }
     }, [filtros, pagination.page, pagination.size]);
 
-
+    const handlePaginationChange = (newPage: number, newSize: number) => {
+        setPagination({page: newPage, size: newSize, totalPages: pagination.totalPages});
+    };
     return (
         <div className="p-6 bg-background">
             <div className="mb-6 flex gap-4 items-center">
@@ -134,7 +139,10 @@ const FabricantesList = () => {
                     </>
                 )}
             />
-            <CustomPagination pagination={pagination} setPagination={setPagination}/>
+            <CustomPagination
+                pagination={pagination}
+                onPaginationChange={handlePaginationChange} // Single callback
+            />
         </div>
     );
 };

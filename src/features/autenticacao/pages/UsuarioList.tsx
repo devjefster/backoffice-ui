@@ -20,7 +20,10 @@ const UsuarioList: React.FC = () => {
             const data = await listarComFiltros(filters.textoBusca, pagination.page, pagination.size);
             if (data) {
                 setUsuarios(data.content);
-                setPagination((prev) => ({...prev, totalPages: data.totalPages}));
+                setPagination((prev) => ({
+                    ...prev,
+                    totalPages: data.page?.totalPages ?? 1,
+                }));
             }
         } catch (err) {
             console.error("Erro ao carregar os usuários:", err);
@@ -28,7 +31,9 @@ const UsuarioList: React.FC = () => {
             setIsLoading(false);
         }
     }, [filters.textoBusca, pagination.page, pagination.size]);
-
+    const handlePaginationChange = (newPage: number, newSize: number) => {
+        setPagination({page: newPage, size: newSize, totalPages: pagination.totalPages});
+    };
     const handleDelete = async (id: number) => {
         if (window.confirm("Tem certeza que deseja excluir este usuário?")) {
             try {
@@ -121,8 +126,10 @@ const UsuarioList: React.FC = () => {
                 )}
             />
 
-            {/* Pagination */}
-            <CustomPagination pagination={pagination} setPagination={setPagination}/>
+            <CustomPagination
+                pagination={pagination}
+                onPaginationChange={handlePaginationChange} // Single callback
+            />
         </div>
     );
 };

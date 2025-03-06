@@ -42,10 +42,9 @@ const LoginPage: React.FC = () => {
         try {
             const token = await loginUser(username, password);
             login(token.token); // Save authenticated state in context
-
+            localStorage.setItem("token", token.token);
             if (rememberMe) {
                 localStorage.setItem("username", username);
-                localStorage.setItem("token", token.token);
                 localStorage.setItem("profilePhoto", profilePhoto || "");
             } else {
                 localStorage.removeItem("username");

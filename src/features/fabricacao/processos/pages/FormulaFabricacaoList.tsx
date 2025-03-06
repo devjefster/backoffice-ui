@@ -31,7 +31,10 @@ const FormulaFabricacaoList = () => {
             );
             if (data) {
                 setFormulas(data.content);
-                setPagination((prev) => ({...prev, totalPages: data.totalPages}));
+                setPagination((prev) => ({
+                    ...prev,
+                    totalPages: data.page?.totalPages ?? 1,
+                }));
             }
         } catch (err) {
             console.error("Erro ao carregar as fórmulas de fabricação:", err);
@@ -43,7 +46,9 @@ const FormulaFabricacaoList = () => {
     useEffect(() => {
         fetchFormulas();
     }, [fetchFormulas]);
-
+    const handlePaginationChange = (newPage: number, newSize: number) => {
+        setPagination({page: newPage, size: newSize, totalPages: pagination.totalPages});
+    };
     return (
         <div className="p-8 bg-background">
             <div className="mb-6 flex gap-4 items-center">
@@ -126,7 +131,11 @@ const FormulaFabricacaoList = () => {
                 )}
             />
 
-            <CustomPagination pagination={pagination} setPagination={setPagination}/>
+            <CustomPagination
+                pagination={pagination}
+                onPaginationChange={handlePaginationChange} // Single callback
+            />
+
         </div>
     );
 };

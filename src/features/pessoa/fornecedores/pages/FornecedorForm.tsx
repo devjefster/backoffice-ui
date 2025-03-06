@@ -33,7 +33,7 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
         inscricaoEstadual: ""
     });
 
-    const [errors, setErrors] = useState<{ cpfCnpj?: string; razaoSocial?: string, nome?: string, email?: string }>({});
+    const [errors, setErrors] = useState<{ cpfCnpj?: string; razaoSocial?: string, nome?: string }>({});
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [fornecedorNameToDelete, setPessoaNameToDelete] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -72,7 +72,7 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
                 ...prev.enderecos,
                 {
                     id: null,
-                    tipo: TipoEndereco.RESIDENCIAL,
+                    tipo: TipoEndereco.COMERCIAL,
                     logradouro: "",
                     complemento: "",
                     bairro: "",
@@ -133,8 +133,7 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
             if (!response.data.unico) {
                 setErrors({
                     ...errors,
-                    cpfCnpj: response.data.cpfCnpj || "",
-                    email: response.data.email || "",
+                    cpfCnpj: response.data.cpfCnpj || ""
                 });
                 return false;
             }
@@ -294,13 +293,11 @@ const FornecedorForm: React.FC<{ fornecedor?: Pessoa | null; onSave: (formData: 
                 <EmailInput
                     value={formData.email || ""}
                     onChange={(value) => handleChange("email", value)}
-                    label="E-mail"
-                    required/>
+                    label="E-mail"/>
                 <TelefoneInput
                     value={formData.telefone || ""}
                     onChange={(value) => handleChange("telefone", value)}
-                    label="Telefone"
-                    required/>
+                    label="Telefone"/>
                 <TelefoneInput
                     value={formData.telefoneSecundario || ""}
                     onChange={(value) => handleChange("telefoneSecundario", value)}

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {EntradaInsumosDTO} from "@features/entrada_insumos/model/EntradaInsumos";
+import {EntradaInsumoItemDTO, EntradaInsumosDTO} from "@features/entrada_insumos/model/EntradaInsumos";
 import {Button, Spinner, TableCell, TextInput} from "flowbite-react";
 import {useNavigate} from "react-router-dom";
 import {HiOutlineSearch, HiTrash} from "react-icons/hi";
@@ -42,7 +42,10 @@ const EntradaInsumosList = () => {
             );
             if (data) {
                 setEntradas(data.content);
-                setPagination((prev) => ({...prev, totalPages: data.totalPages}));
+                setPagination((prev) => ({
+                    ...prev,
+                    totalPages: data.page?.totalPages ?? 1,
+                }));
             }
         } catch (err) {
             console.error("Erro ao carregar as entradas de insumos:", err);
@@ -66,7 +69,9 @@ const EntradaInsumosList = () => {
         setSelectedEntradaName(entrada.fornecedor?.nomeFantasia || null);
         setModalOpen(true);
     };
-
+    const handlePaginationChange = (newPage: number, newSize: number) => {
+        setPagination({page: newPage, size: newSize, totalPages: pagination.totalPages});
+    };
     const handleDelete = async () => {
         if (!selectedEntradaId) return;
         try {
@@ -87,7 +92,13 @@ const EntradaInsumosList = () => {
             return [];
         }
     };
-
+    const calcCustoTotal = (itens: EntradaInsumoItemDTO[]) => {
+        let sum = 0;
+        itens.forEach(iten => {
+            sum += iten.precoUnitario*iten.quantidade;
+        })
+        return sum;
+    }
     return (
         <div className="bg-gradient-to-b from-background to-background-alt">
             <TituloPagina titulo={"Entrada de Insumos"} subTitulo={"Listagem"}/>
@@ -143,18 +154,14 @@ const EntradaInsumosList = () => {
                 headers={[
                     {key: "fornecedor.nomeFantasia", label: "Fornecedor", sortable: true},
                     {key: "dataEntrada", label: "Data Entrada", sortable: true},
-                    {key: "custoFrete", label: "Custo Frete", sortable: true},
-                    {key: "custoOutros", label: "Custo Outros", sortable: true},
                     {key: "custoTotal", label: "Custo Total", sortable: true},
                     {key: "acoes", label: "Ações"},
                 ]}
                 renderRow={(entrada) => (
-                    <tr key={entrada.id} className="hover:bg-gray-50">
+                    <>
                         <TableCell>{entrada.fornecedor?.nomeFantasia || "N/A"}</TableCell>
                         <TableCell>{new Date(entrada.dataEntrada).toLocaleDateString()}</TableCell>
-                        <TableCell>R$ {entrada.custoFrete.toFixed(2)}</TableCell>
-                        <TableCell>R$ {entrada.custoOutros.toFixed(2)}</TableCell>
-                        <TableCell>R$ {(entrada.custoFrete + entrada.custoOutros).toFixed(2)}</TableCell>
+                        <TableCell>R$ {(calcCustoTotal(entrada.itens)).toFixed(2)}</TableCell>
                         <TableCell>
                             <div className="flex gap-2">
                                 <Button gradientDuoTone="cyanToBlue"
@@ -167,12 +174,15 @@ const EntradaInsumosList = () => {
                                 </Button>
                             </div>
                         </TableCell>
-                    </tr>
+                    </>
                 )}
                 emptyMessage="Nenhuma entrada de insumo encontrada."
             />
 
-            <CustomPagination pagination={pagination} setPagination={setPagination}/>
+            <CustomPagination
+                pagination={pagination}
+                onPaginationChange={handlePaginationChange} // Single callback
+            />
             <DeleteModal isOpen={isModalOpen} entityName={selectedEntradaName} onClose={() => setModalOpen(false)}
                          onConfirm={handleDelete}/>
         </div>

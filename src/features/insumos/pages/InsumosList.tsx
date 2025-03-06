@@ -25,18 +25,29 @@ const InsumoList = () => {
     const fetchInsumos = useCallback(async () => {
         setIsLoading(true);
         try {
-            const response = await InsumoService.listarComFiltros(filters.textoBusca, filters.tipo, pagination.page, pagination.size);
+            const response = await InsumoService.listarComFiltros(
+                filters.textoBusca,
+                filters.tipo,
+                pagination.page,
+                pagination.size
+            );
             if (response) {
                 setInsumos(response.content || []);
-                setPagination((prev) => ({...prev, totalPages: response.totalPages}));
+                setPagination((prev) => ({
+                    ...prev,
+                    totalPages: response.page?.totalPages ?? 1,
+                }));
             }
         } catch (error) {
             console.error("Erro ao carregar insumos:", error);
         } finally {
             setIsLoading(false);
         }
-    }, [filters, pagination.page, pagination.size]);
+    }, [filters, pagination.page, pagination.size]); // Dependencies ensure automatic fetch
 
+    const handlePaginationChange = (newPage: number, newSize: number) => {
+        setPagination({page: newPage, size: newSize, totalPages: pagination.totalPages});
+    };
     const fetchFiltros = async () => {
         try {
             const tiposResponse = await InsumoService.obterTiposDeInsumo();
@@ -47,10 +58,14 @@ const InsumoList = () => {
             console.error("Erro ao carregar filtros:", error);
         }
     };
+    const getTipoInsumoLabel = (tipo: string | null) => {
+        const match = tiposInsumo.find((item) => item.chave === tipo);
+        return match ? match.valor : "N/A"; // Return the label or "N/A" if not found
+    };
 
     useEffect(() => {
-        fetchInsumos();
         fetchFiltros();
+        fetchInsumos();
     }, [fetchInsumos]);
 
     const handleResetFilters = () => {
@@ -100,28 +115,30 @@ const InsumoList = () => {
                     enums={tiposInsumo}
                     value={filters.tipo}
                     placeholder="Selecione o Tipo de Insumo"
-                    onChange={(e) => handleChange("tipo",e)}
+                    onChange={(e) => handleChange("tipo", e)}
                 />
 
                 <Seletor
                     enums={unidadesMedida}
                     value={filters.unidadeMedida}
                     placeholder="Selecione a Unidade de Medida"
-                    onChange={(e) => handleChange("unidadeMedida",e)}
+                    onChange={(e) => handleChange("unidadeMedida", e)}
                 />
             </div>
             <div className="flex justify-end mb-6 space-x-4">
-                <Button gradientDuoTone="purpleToBlue" onClick={fetchInsumos} disabled={isLoading} className="flex items-center gap-2">
+                <Button gradientDuoTone="purpleToBlue" onClick={fetchInsumos} disabled={isLoading}
+                        className="flex items-center gap-2">
                     <HiOutlineSearch className="w-5 h-5"/>
                     {isLoading ? "Carregando..." : "Filtrar"}
                 </Button>
 
-                <Button color="gray" onClick={handleResetFilters}  className="flex items-center gap-2">
+                <Button color="gray" onClick={handleResetFilters} className="flex items-center gap-2">
                     <HiOutlineX className="w-5 h-5"/>
                     Limpar Filtros
                 </Button>
 
-                <Button gradientDuoTone="greenToBlue" onClick={() => navigate("/insumos/:new")}  className="flex items-center gap-2">
+                <Button gradientDuoTone="greenToBlue" onClick={() => navigate("/insumos/:new")}
+                        className="flex items-center gap-2">
                     <HiPlus className="w-5 h-5"/>
                     Novo Insumo
                 </Button>
@@ -144,10 +161,11 @@ const InsumoList = () => {
                         <>
                             <TableCell>{insumo.nome}</TableCell>
                             <TableCell>{insumo.descricao}</TableCell>
-                            <TableCell>{insumo.tipo}</TableCell>
+                            <TableCell>{getTipoInsumoLabel(insumo.tipo)?? "N/A"}</TableCell>
                             <TableCell>
                                 <div className="flex gap-2">
-                                    <Button size="xs" onClick={() => navigate(`/insumos/${insumo.id}/edit`)} className="flex items-center gap-2">
+                                    <Button size="xs" onClick={() => navigate(`/insumos/${insumo.id}/edit`)}
+                                            className="flex items-center gap-2">
                                         <HiPencil className="mr-1"/> Editar
                                     </Button>
                                     <Button
@@ -175,9 +193,9 @@ const InsumoList = () => {
 
             <CustomPagination
                 pagination={pagination}
-                setPagination={setPagination}
-                onPageSizeChange={(size) => setPagination((prev) => ({...prev, size, page: 0}))}
+                onPaginationChange={handlePaginationChange} // Single callback
             />
+
 
         </div>
     );

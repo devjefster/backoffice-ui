@@ -7,26 +7,20 @@ interface PaginationProps {
         size: number;
         totalPages: number;
     };
-    setPagination: React.Dispatch<React.SetStateAction<{
-        page: number;
-        size: number;
-        totalPages: number;
-    }>>;
-    onPageSizeChange?: (size: number) => void; // Optional prop for page size changes
+    onPaginationChange: (newPage: number, newSize: number) => void; // Single function for updates
 }
-
-const CustomPagination: React.FC<PaginationProps> = ({ pagination, setPagination, onPageSizeChange }) => {
+const CustomPagination: React.FC<PaginationProps> = ({ pagination, onPaginationChange }) => {
     const { page, size, totalPages } = pagination;
 
     const handlePageChange = (newPage: number) => {
-        setPagination((prev) => ({ ...prev, page: newPage }));
+        onPaginationChange(newPage, size);
     };
 
     const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newSize = parseInt(e.target.value, 10);
-        setPagination((prev) => ({ ...prev, size: newSize, page: 0 })); // Reset to page 0
-        onPageSizeChange?.(newSize);
+        onPaginationChange(0, newSize); // Reset to page 0 when size changes
     };
+
 
     return (
         <div className="flex justify-between items-center mt-6">

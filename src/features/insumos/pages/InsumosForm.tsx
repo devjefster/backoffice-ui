@@ -96,11 +96,14 @@ const InsumoForm: React.FC<{
             if (formData.id && formData.id > 0) {
                 const updated = await InsumoService.atualizar(formData.id, sanitizedData);
                 onSave(updated.data);
+                alert("Insumo alterado com sucesso!");
             } else {
                 const created = await InsumoService.criar(sanitizedData);
                 onSave(created.data);
+                alert("Insumo cadastrado com sucesso!");
             }
         } catch (error) {
+            alert("Erro ao salvar o insumo: " + error);
             console.error("Erro ao salvar o insumo:", error);
         }
     };
@@ -171,7 +174,7 @@ const InsumoForm: React.FC<{
                                         value={formData.tipoMateriaPrima}
                                         placeholder="Selecione o Tipo de matéria prima"
                                         onChange={(e) => {
-                                            handleChange("tipoMateriaPrima",e)
+                                            handleChange("tipoMateriaPrima", e)
                                         }}
                                     />
                                 </div>
@@ -199,7 +202,7 @@ const InsumoForm: React.FC<{
                                         value={formData.tipoConsumivel}
                                         placeholder="Selecione o Tipo Consumível"
                                         onChange={(e) => {
-                                            handleChange("tipoConsumivel",e)
+                                            handleChange("tipoConsumivel", e)
                                         }}
                                     />
                                 </div>
@@ -227,7 +230,7 @@ const InsumoForm: React.FC<{
                                         value={formData.tipoEmbalagem}
                                         placeholder="Selecione o Tipo de matéria prima"
                                         onChange={(e) => {
-                                            handleChange("tipoEmbalagem",e)
+                                            handleChange("tipoEmbalagem", e)
                                         }}
                                     />
                                 </div>

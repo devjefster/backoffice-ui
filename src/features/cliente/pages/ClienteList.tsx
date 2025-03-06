@@ -9,8 +9,8 @@ import {Cliente} from "../model/Cliente";
 
 const ClienteList = () => {
     const [clientes, setClientes] = useState<Cliente[]>([]);
-    const [filters, setFilters] = useState({ textoBusca: "" });
-    const [pagination, setPagination] = useState({ page: 0, size: 10, totalPages: 0 });
+    const [filters, setFilters] = useState({textoBusca: ""});
+    const [pagination, setPagination] = useState({page: 0, size: 10, totalPages: 0});
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -24,7 +24,10 @@ const ClienteList = () => {
             );
             if (data) {
                 setClientes(data.content);
-                setPagination((prev) => ({ ...prev, totalPages: data.totalPages }));
+                setPagination((prev) => ({
+                    ...prev,
+                    totalPages: data.page?.totalPages ?? 1,
+                }));
             }
         } catch (err) {
             console.error("Erro ao carregar os clientes:", err);
@@ -32,7 +35,9 @@ const ClienteList = () => {
             setIsLoading(false);
         }
     }, [filters.textoBusca, pagination.page, pagination.size]);
-
+    const handlePaginationChange = (newPage: number, newSize: number) => {
+        setPagination({page: newPage, size: newSize, totalPages: pagination.totalPages});
+    };
     useEffect(() => {
         fetchClientes();
     }, [fetchClientes]);
@@ -95,8 +100,11 @@ const ClienteList = () => {
                 )}
             />
 
-            {/* Pagination */}
-            <CustomPagination pagination={pagination} setPagination={setPagination}/>
+            <CustomPagination
+                pagination={pagination}
+                onPaginationChange={handlePaginationChange} // Single callback
+            />
+
         </div>
     );
 };

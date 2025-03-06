@@ -11,6 +11,7 @@ import DinheiroInput from "@components/inputs/DinheiroInput";
 import TituloPagina from "@components/comum/TituloPagina";
 import {Enum} from "../../../model/Comum";
 import Seletor from "@components/comum/Seletor";
+import EntradaInsumosService from "@features/entrada_insumos/service/EntradaInsumosService";
 
 const EntradaInsumosForm: React.FC<{
     entradaInsumo?: EntradaInsumosDTO | null;
@@ -64,11 +65,13 @@ const EntradaInsumosForm: React.FC<{
 
         // Resetar o novo item
         setNovoItem({
-            quantidade: 0,
-            precoUnitario: 0,
+            quantidade: undefined,
+            precoUnitario: undefined,
+            fabricante: undefined,
+            insumo: undefined,
             unidadeMedidaEntrada: null,
             validade: null,
-            custoTotal: 0,
+            custoTotal: undefined,
         });
     };
 
@@ -91,24 +94,30 @@ const EntradaInsumosForm: React.FC<{
             alert("Fornecedor e Data de Entrada são obrigatórios.");
             return;
         }
+        EntradaInsumosService.criarEntrada(formData);
+
         onSave(formData);
-        navigate("/entrada-insumos");
     };
-    const fetchPaginatedList = async (serviceMethod: Function, query: string, additionalParams?: any) => {
+    const fetchInsumo = async (query: string, additionalParams?: any) => {
         try {
-            const response = await serviceMethod(query, 0, 10, additionalParams);
-            return response?.content || [];
+            const response = await InsumoService.listarComFiltros(query, undefined, 0, 10);
+            return response?.content || []; // Ensure we get the content array
         } catch (error) {
             console.error("Error fetching paginated list:", error);
             return [];
         }
     };
-    const handleEnumChange = (key: string, value: any) => {
-        setNovoItem((prev) => ({
-            ...prev,
-            [key]: value === "" ? null : value // Se for vazio, define como null
-        }));
+    const fetchPaginatedList = async (serviceMethod: Function, query: string, additionalParams?: any) => {
+        try {
+            let filtro = {nome: query.trim(),tipo:additionalParams}; // Trim spaces from input
+            const response = await serviceMethod(filtro, 0, 10, additionalParams);
+            return response?.content || []; // Ensure we get the content array
+        } catch (error) {
+            console.error("Error fetching paginated list:", error);
+            return [];
+        }
     };
+
 
     const custoTotal = () => {
         let custoTotal = 0;
@@ -135,7 +144,7 @@ const EntradaInsumosForm: React.FC<{
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <Label htmlFor="fornecedor" className="text-gray-700 font-semibold">Fornecedor *</Label>
-                    <TypeAhead fetchOptions={(query) => fetchPaginatedList(PessoaService.listarComFiltros, query)}
+                    <TypeAhead fetchOptions={(query) => fetchPaginatedList(PessoaService.listarComFiltros, query,'FORNECEDOR')}
                                onSelect={(selected) => handleChange("fornecedor", selected)}
                                placeholder="Selecione o fornecedor"/>
                 </div>
@@ -148,7 +157,7 @@ const EntradaInsumosForm: React.FC<{
                     <Label htmlFor="custoFrete" className="text-gray-700 font-semibold">Custo Frete</Label>
                     <DinheiroInput
                         value={formData.custoFrete.toString()}
-                        onChange={(value) => handleChange("custoFrete", parseFloat(value))}
+                        onChange={(value) => handleChange("custoFrete", value)}
                         placeholder="Custo Frete"
                     />
                 </div>
@@ -157,7 +166,7 @@ const EntradaInsumosForm: React.FC<{
                     <Label htmlFor="custoOutros" className="text-gray-700 font-semibold">Custo Outros</Label>
                     <DinheiroInput
                         value={formData.custoOutros.toString()}
-                        onChange={(value) => handleChange("custoOutros", parseFloat(value))}
+                        onChange={(value) => handleChange("custoOutros", value)}
                         placeholder="Custo Outros"
                     />
                 </div>
@@ -167,31 +176,31 @@ const EntradaInsumosForm: React.FC<{
                 <h3 className="text-2xl font-bold text-gray-700 mb-4">Itens</h3>
                 <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center mb-4">
                     <TypeAhead
-                        fetchOptions={(query) => fetchPaginatedList(InsumoService.listarComFiltros, query)}
+                        fetchOptions={(query) => fetchInsumo(query)}
                         onSelect={(selected) => handleNovoItemChange("insumo", selected)}
                         placeholder="Selecione o insumo"
                     />
                     <TypeAhead
-                        fetchOptions={(query) => fetchPaginatedList(PessoaService.listarComFiltros, query)}
+                        fetchOptions={(query) => fetchPaginatedList(PessoaService.listarComFiltros, query,'FABRICANTE')}
                         onSelect={(selected) => handleNovoItemChange("fabricante", selected)}
                         placeholder="Selecione o fabricante"
                     />
                     <TextInput
                         type="number"
                         placeholder="Quantidade"
-                        value={novoItem.quantidade || ""}
+                        value={novoItem.quantidade || 0}
                         onChange={(e) => handleNovoItemChange("quantidade", parseFloat(e.target.value))}
                     />
                     <DinheiroInput
                         value={(novoItem.precoUnitario ?? 0).toString()}
-                        onChange={(value) => handleNovoItemChange("precoUnitario", parseCurrency(value))}
+                        onChange={(value) => handleNovoItemChange("precoUnitario", value)}
                         placeholder="Custo Outros"
                     />
                     <Seletor
                         enums={unidadeMedidaOptions}
                         value={novoItem.unidadeMedidaEntrada}
                         placeholder="Selecione a Unidade de Medida"
-                        onChange={(e) => handleEnumChange("unidadeMedida", e)}
+                        onChange={(e) => handleNovoItemChange("unidadeMedidaEntrada", e)}
                     />
                     <Button gradientDuoTone="greenToBlue" onClick={addItem}>
                         <HiOutlinePlus className="mr-2"/>
@@ -211,10 +220,9 @@ const EntradaInsumosForm: React.FC<{
                         renderRow={(item, index) => (
                             <>
                                 <TableCell>{item.insumo.nome}</TableCell>
-                                <TableCell>{item.fabricante.nomeFantasia}%</TableCell>
+                                <TableCell>{item.fabricante.nomeFantasia}</TableCell>
                                 <TableCell>{formatCurrency(item.precoUnitario)}</TableCell>
-                                <TableCell>{item.unidadeMedidaEntrada}</TableCell>
-                                <TableCell>{formatCurrency(item.precoUnitario * item.quantidade)}</TableCell>
+                                <TableCell>{formatCurrency(item.precoUnitario / item.quantidade)}</TableCell>
                                 <TableCell>
                                     <Button color="failure" size="sm" onClick={() => removeItem(index)}>
                                         <HiTrash className="w-5 h-5"/>

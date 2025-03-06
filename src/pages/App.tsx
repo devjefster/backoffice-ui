@@ -79,7 +79,7 @@ const App: React.FC = () => {
 
 function InsumosFormWrapper() {
     const navigate = useNavigate();
-    const handleSave = () => navigate("/insumos");
+    const handleSave = () => navigate("/insumos/cadastro");
     return <InsumoForm onSave={handleSave}/>;
 }
 
